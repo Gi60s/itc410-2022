@@ -1,0 +1,314 @@
+openapi: 3.0.3
+info:
+  title: To Do API
+  version: v1
+paths:
+  /accounts:
+    x-controller: accounts
+    post:
+      x-operation: createAccount
+      tags:
+        - Accounts
+      summary: Create an account
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - username
+                - name
+                - password
+              properties:
+                username:
+                  type: string
+                name:
+                  type: string
+                password:
+                  type: string
+                  format: password
+            example:
+              username: Bob42
+              name: Bob
+              password: theanswer
+      responses:
+        201:
+          description: Account created.
+        400:
+          description: Invalid request.
+        409:
+          description: Account already exists.
+  /accounts/{accountId}:
+    x-controller: accounts
+    parameters:
+      - $ref: '#/components/parameters/PathAccountId'
+    delete:
+      x-operation: deleteAccount
+      tags:
+        - Accounts
+      summary: Delete an account.
+      responses:
+        204:
+          description: Account deleted.
+        401:
+          description: Not authenticated.
+        403:
+          description: Access denied.
+  /accounts/{accountId}/login:
+    x-controller: accounts
+    parameters:
+      - $ref: '#/components/parameters/PathAccountId'
+    put:
+      x-operation: login
+      tags:
+        - Accounts
+      summary: Log in.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - password
+              properties:
+                password:
+                  type: string
+                  format: password
+            example:
+              password: theanswer
+      responses:
+        200:
+          description: Authenticated.
+        400:
+          description: Invalid request.
+        403:
+          description: Access denied.
+  /accounts/{accountId}/logout:
+    x-controller: accounts
+    parameters:
+      - $ref: '#/components/parameters/PathAccountId'
+    put:
+      x-operation: logout
+      tags:
+        - Accounts
+      summary: Log out.
+      responses:
+        200:
+          description: Logged out.
+        403:
+          description: Access denied.
+  /tasks:
+    x-controller: tasks
+    get:
+      x-operation: getTasks
+      tags:
+        - Tasks
+      summary: Get tasks.
+      parameters:
+        - name: completed
+          in: query
+          schema:
+            type: boolean
+        - name: dueDateAfter
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: dueDateBefore
+          in: query
+          schema:
+            type: string
+            format: date-time
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tasks'
+        400:
+          description: Invalid request.
+        401:
+          description: Not authenticated.
+    post:
+      x-operation: createTask
+      tags:
+        - Tasks
+      summary: Add a task.
+      requestBody:
+        $ref: '#/components/requestBodies/SetTask'
+      responses:
+        201:
+          description: Task created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tasks'
+        400:
+          description: Invalid request.
+        401:
+          description: Not authenticated.
+  /tasks/{taskId}:
+    x-controller: tasks
+    parameters:
+      - $ref: '#/components/parameters/PathTaskId'
+    put:
+      x-operation: updateTask
+      tags:
+        - Tasks
+      summary: Update a task.
+      requestBody:
+        $ref: '#/components/requestBodies/SetTask'
+      responses:
+        200:
+          description: Task updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tasks'
+        400:
+          description: Invalid request.
+        401:
+          description: Not authenticated.
+        403:
+          description: Access denied.
+        404:
+          description: Not found.
+    delete:
+      x-controller: deleteTask
+      tags:
+        - Tasks
+      summary: Delete a task.
+      responses:
+        204:
+          description: Task deleted
+        401:
+          description: Not authenticated.
+        403:
+          description: Access denied.
+  /tasks/{taskId}/files:
+    x-controller: tasks
+    parameters:
+      - $ref: '#/components/parameters/PathTaskId'
+    post:
+      x-operation: uploadFile
+      tags:
+        - Files
+      summary: Add a file to a task.
+      requestBody:
+        content:
+          binary/octet-stream:
+            schema:
+              $ref: '#/components/schemas/File'
+      responses:
+        201:
+          description: File saved.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tasks'
+        400:
+          description: Invalid request.
+        401:
+          description: Not authenticated.
+        403:
+          description: Access denied.
+        404:
+          description: Task not found.
+  /tasks/{taskId}/files/{fileId}:
+    x-controller: tasks
+    parameters:
+      - $ref: '#/components/parameters/PathTaskId'
+      - $ref: '#/components/parameters/PathFileId'
+    get:
+      x-operation: downloadFile
+      tags:
+        - Files
+      summary: Get a file.
+      responses:
+        200:
+          description: File downloaded.
+          content:
+            binary/octet-stream:
+              schema:
+                $ref: '#/components/schemas/File'
+        401:
+          description: Not authenticated.
+        403:
+          description: Access denied.
+        404:
+          description: Task or file not found.
+    delete:
+      x-operation: deleteFile
+      tags:
+        - Files
+      summary: Delete a file.
+      responses:
+        204:
+          description: File deleted
+        401:
+          description: Not authenticated.
+        403:
+          description: Access denied.
+        404:
+          description: Task not found.
+components:
+  parameters:
+    PathAccountId:
+      name: accountId
+      in: path
+      required: true
+      schema:
+        type: string
+    PathTaskId:
+      name: taskId
+      in: path
+      required: true
+      schema:
+        type: string
+    PathFileId:
+      name: fileId
+      in: path
+      required: true
+      schema:
+        type: string
+  requestBodies:
+    SetTask:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Task'
+  schemas:
+    File:
+      type: string
+      format: binary
+    Task:
+      type: object
+      properties:
+        taskId:
+          type: string
+          readOnly: true
+        title:
+          type: string
+        description:
+          type: string
+        dueDate:
+          type: string
+          format: date-time
+        completed:
+          type: string
+          format: date-time
+          nullable: true
+        files:
+          type: array
+          readOnly: true
+          items:
+            description: File ID
+            type: string
+    Tasks:
+      type: array
+      items:
+        $ref: '#/components/schemas/Task'

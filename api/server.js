@@ -1,7 +1,12 @@
+require('dotenv').config()
+require('./database/init')
+
 const Enforcer = require('openapi-enforcer')
 const EnforcerMiddleware = require('openapi-enforcer-middleware')
 const express = require('express')
 const path = require('path')
+const Accounts = require('./controllers/account')
+const Tasks = require('./controllers/tasks')
 
 const app = express()
 
@@ -22,27 +27,14 @@ app.use(enforcerMiddleware.init({ baseUrl: '/api' }))
 
 // Catch errors
 enforcerMiddleware.on('error', err => {
-  console.error(err)
-  process.exit(1)
+  	console.error(err)
+  	process.exit(1)
 }) 
 
-//   app.use(enforcerMiddleware.route({
-//     // The "users" is mapped to via the "x-controller" value.
-//     accounts: {
-//       // The "listUsers" is mapped to via the "x-operation" or "operationId" value.
-//       async login (req, res) {
-//         const { rows } = dbClient.query('SELECT * FROM users')
-//         const users = rows.map(row => {
-//           return {
-//             id: row.id,
-//             name: row.name,
-//             email: row.email
-//           }
-//         })
-//         res.enforcer.send(users)
-//       }
-//     }
-//   }))
+app.use(enforcerMiddleware.route({
+	accounts: Accounts,
+	tasks: Tasks
+}))
 
 // add fallback mocking middleware here
 app.use(enforcerMiddleware.mock())

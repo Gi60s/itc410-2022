@@ -13,10 +13,10 @@ const enforcerMiddleware = EnforcerMiddleware(enforcerPromise)
 
 app.use(express.json())
 
-app.use((req, res, next) => {
-  console.log(req.method + ' ' + req.path, req.headers, req.body)
-  next()
-})
+// app.use((req, res, next) => {
+//   console.log(req.method + ' ' + req.path, req.headers, req.body)
+//   next()
+// })
 
 app.use(enforcerMiddleware.init({ baseUrl: '/api' }))
 

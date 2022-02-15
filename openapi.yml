@@ -28,6 +28,7 @@ paths:
                 password:
                   type: string
                   format: password
+                  minLength: 1
             example:
               username: Bob42
               name: Bob
@@ -43,6 +44,36 @@ paths:
     x-controller: accounts
     parameters:
       - $ref: '#/components/parameters/PathAccountId'
+    patch:
+      x-operation: updateAccount
+      tags:
+        - Accounts
+      summary: Update an account.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                name:
+                  type: string
+                password:
+                  type: string
+                  format: password
+                  minLength: 1
+      responses:
+        200:
+          description: Account updated
+        400:
+          description: Invalid request
+        401:
+          description: Not authenticated.
+        403:
+          description: Access denied.
+        404:
+          description: Not found.
     delete:
       x-operation: deleteAccount
       tags:

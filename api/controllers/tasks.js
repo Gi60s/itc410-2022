@@ -1,28 +1,32 @@
 
-exports.createTask = async function (req, res) {
+module.exports = function (pool) {
+    return {
+        async createTask (req, res) {
 
-}
+        },
 
-exports.getTasks = async function (req, res) {
-    
-}
+        async getTasks (req, res) {
 
-exports.updateTask = async function (req, res) {
-    
-}
+        },
+        
+        async updateTask (req, res) {
 
-exports.deleteTask = async function (req, res) {
-    
-}
+        },
+        
+        async deleteTask (req, res) {
 
-exports.uploadFile = async function (req, res) {
-    
-}
+        },
+        
+        async uploadFile (req, res) {
 
-exports.downloadFile = async function (req, res) {
-    
-}
+        },
+        
+        async downloadFile (req, res) {
 
-exports.deleteFile = async function (req, res) {
-    
+        },
+        
+        async deleteFile (req, res) {
+
+        }
+    }
 }

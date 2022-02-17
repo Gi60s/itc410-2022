@@ -1,5 +1,24 @@
 <template>
-  <v-row justify="center" align="center">
+  <div>
+    <form @submit="stopDefault">
+      <input type="text" placeholder="Your Name" v-model="fullname"><br>
+      <input type="text" placeholder="Phone"><br>
+      <input type="text" placeholder="Address"><br>
+
+      <ul v-if="hasName">
+        <li v-for="x in messages" :key="x.message">
+          <input type="radio" :id="x.id" :value="x.value" v-model="picked">
+          <label :for="x.id">{{ x.message }}</label>
+        </li>
+      </ul>
+
+      <button>Click Me</button>
+
+      Your Name: {{ fullname }}
+    </form>
+  </div>
+
+  <!-- <v-row justify="center" align="center">
     <v-col cols="12" sm="8" md="6">
       <v-card class="logo py-4 d-flex justify-center">
         <NuxtLogo />
@@ -73,11 +92,37 @@
         </v-card-actions>
       </v-card>
     </v-col>
-  </v-row>
+  </v-row> -->
 </template>
 
 <script>
 export default {
-  name: 'IndexPage'
+  name: 'IndexPage',
+
+  data () {
+    return {
+      fullname: '',
+      phone: '',
+      address: '',
+      picked: '',
+      messages: [
+        { id: '1', message: 'Foo', value: 'foo' },
+        { id: '2', message: 'Bar', value: 'bar' }
+      ]
+    }
+  },
+
+  methods: {
+    stopDefault ($event) {
+      console.log('Submitted')
+      $event.preventDefault()
+    }
+  },
+
+  computed: {
+    hasName () {
+      return this.fullname.length > 0
+    }
+  }
 }
 </script>

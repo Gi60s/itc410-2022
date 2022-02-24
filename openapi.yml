@@ -48,6 +48,8 @@ paths:
       x-operation: updateAccount
       tags:
         - Accounts
+      security:
+        - cookieAuth: []
       summary: Update an account.
       requestBody:
         content:
@@ -78,6 +80,8 @@ paths:
       x-operation: deleteAccount
       tags:
         - Accounts
+      security:
+        - cookieAuth: []
       summary: Delete an account.
       responses:
         204:
@@ -124,6 +128,8 @@ paths:
       x-operation: logout
       tags:
         - Accounts
+      security:
+        - cookieAuth: []
       summary: Log out.
       responses:
         200:
@@ -136,6 +142,8 @@ paths:
       x-operation: getTasks
       tags:
         - Tasks
+      security:
+        - cookieAuth: []
       summary: Get tasks.
       parameters:
         - name: completed
@@ -167,6 +175,8 @@ paths:
       x-operation: createTask
       tags:
         - Tasks
+      security:
+        - cookieAuth: []
       summary: Add a task.
       requestBody:
         $ref: '#/components/requestBodies/SetTask'
@@ -189,6 +199,8 @@ paths:
       x-operation: updateTask
       tags:
         - Tasks
+      security:
+        - cookieAuth: []
       summary: Update a task.
       requestBody:
         $ref: '#/components/requestBodies/SetTask'
@@ -211,6 +223,8 @@ paths:
       x-controller: deleteTask
       tags:
         - Tasks
+      security:
+        - cookieAuth: []
       summary: Delete a task.
       responses:
         204:
@@ -227,6 +241,8 @@ paths:
       x-operation: uploadFile
       tags:
         - Files
+      security:
+        - cookieAuth: []
       summary: Add a file to a task.
       requestBody:
         content:
@@ -257,6 +273,8 @@ paths:
       x-operation: downloadFile
       tags:
         - Files
+      security:
+        - cookieAuth: []
       summary: Get a file.
       responses:
         200:
@@ -275,6 +293,8 @@ paths:
       x-operation: deleteFile
       tags:
         - Files
+      security:
+        - cookieAuth: []
       summary: Delete a file.
       responses:
         204:
@@ -312,6 +332,11 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Task'
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: todoSessionId 
   schemas:
     File:
       type: string

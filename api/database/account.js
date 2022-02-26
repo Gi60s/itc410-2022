@@ -51,7 +51,7 @@ exports.updateAccount = async  function (client, accountId, data) {
     if (values.length === 0) return await exports.getAccount(client, accountId)
 
     values.push(accountId)
-    const { rows } = client.query({
+    const { rows } = await client.query({
         name: 'update-account',
         text: 'UPDATE accounts SET ' + sets.join(', ') + ' WHERE account_id=$' + (values.length) + ' RETURNING *',
         values
@@ -60,7 +60,7 @@ exports.updateAccount = async  function (client, accountId, data) {
 }
 
 exports.deleteAccount = async function (client, accountId) {
-    const { rowCount } = client.query({
+    const { rowCount } = await client.query({
         name: 'delete-account',
         text: 'DELETE FROM accounts WHERE account_id=$1',
         values: [accountId]

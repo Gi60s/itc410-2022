@@ -10,7 +10,7 @@ exports.createAccount = async function (client, username, name, password) {
             accountId,
             username,
             name,
-            encryptPassword(password)	
+            await encryptPassword(password)	
         ]
     })
     return rowCount > 0 ? accountId : undefined
@@ -21,6 +21,15 @@ exports.getAccount = async function (client, accountId) {
         name: 'get-account-by-id',
         text: 'SELECT * FROM accounts WHERE account_id=$1',
         values: [accountId]
+    })
+    return rows[0]
+}
+
+exports.getAccountByUsername = async function (client, username) {
+    const { rows } = await client.query({
+        name: 'get-account-by-username',
+        text: 'SELECT * FROM accounts WHERE username=$1',
+        values: [username]
     })
     return rows[0]
 }
@@ -42,7 +51,7 @@ exports.updateAccount = async  function (client, accountId, data) {
     }
 
     if (password !== undefined) {
-        values.push(encryptPassword(password))
+        values.push(await encryptPassword(password))
         sets.push('password=$' + values.length)
     }
 
@@ -67,7 +76,7 @@ exports.deleteAccount = async function (client, accountId) {
     return rowCount > 0
 }
 
-async function encryptPassword (password: string): Promise<string> {
+async function encryptPassword (password) {
     const salt = await bcrypt.genSalt(10)
     return await bcrypt.hash(password, salt)
 }

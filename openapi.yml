@@ -90,14 +90,12 @@ paths:
           description: Not authenticated.
         403:
           description: Access denied.
-  /accounts/{accountId}/login:
-    x-controller: accounts
-    parameters:
-      - $ref: '#/components/parameters/PathAccountId'
+  /authentication/login:
+    x-controller: authentication
     put:
       x-operation: login
       tags:
-        - Accounts
+        - Authentication
       summary: Log in.
       requestBody:
         required: true
@@ -106,8 +104,11 @@ paths:
             schema:
               type: object
               required:
+                - username
                 - password
               properties:
+                username:
+                  type: string
                 password:
                   type: string
                   format: password
@@ -118,24 +119,18 @@ paths:
           description: Authenticated.
         400:
           description: Invalid request.
-        403:
-          description: Access denied.
-  /accounts/{accountId}/logout:
-    x-controller: accounts
-    parameters:
-      - $ref: '#/components/parameters/PathAccountId'
+        401:
+          description: Not authenticated.
+  /authentication/logout:
+    x-controller: authentication
     put:
       x-operation: logout
       tags:
-        - Accounts
-      security:
-        - cookieAuth: []
+        - Authentication
       summary: Log out.
       responses:
         200:
           description: Logged out.
-        403:
-          description: Access denied.
   /tasks:
     x-controller: tasks
     get:
@@ -313,14 +308,14 @@ components:
       required: true
       schema:
         type: string
-    PathTaskId:
-      name: taskId
+    PathFileId:
+      name: fileId
       in: path
       required: true
       schema:
         type: string
-    PathFileId:
-      name: fileId
+    PathTaskId:
+      name: taskId
       in: path
       required: true
       schema:

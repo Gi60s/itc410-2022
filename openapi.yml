@@ -40,10 +40,10 @@ paths:
           description: Invalid request.
         409:
           description: Account already exists.
-  /accounts/{accountId}:
+  /accounts/{username}:
     x-controller: accounts
     parameters:
-      - $ref: '#/components/parameters/PathAccountId'
+      - $ref: '#/components/parameters/PathUsername'
     patch:
       x-operation: updateAccount
       tags:
@@ -113,6 +113,7 @@ paths:
                   type: string
                   format: password
             example:
+              username: Bob42
               password: theanswer
       responses:
         200:
@@ -302,8 +303,8 @@ paths:
           description: Task not found.
 components:
   parameters:
-    PathAccountId:
-      name: accountId
+    PathUsername:
+      name: username
       in: path
       required: true
       schema:

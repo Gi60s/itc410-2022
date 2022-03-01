@@ -29,8 +29,11 @@ export const actions = {
     }
 }
 
+// Check if the user cookie is set and if so get the cookie value.
+// This cookie is set in addition to the session cookie when the user
+// authenticated, but this cookie is made accessible to the browser's
+// JavaScript.
 function getUserFromCookie () {
-    // Check if the user cookie is set and if so get the cookie value
     const re = new RegExp("user=([^;]+)") 
     const value = re.exec(document.cookie)
     return value != null ? unescape(value[1]) : null

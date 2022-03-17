@@ -4,6 +4,12 @@ export const state = () => {
     }
 }
 
+export const getters = {
+    isAuthenticated (state) {
+        return state.user !== null
+    }
+}
+
 export const mutations = {
     setUser (state, user) {
         state.user = user
@@ -36,5 +42,5 @@ export const actions = {
 function getUserFromCookie () {
     const re = new RegExp("user=([^;]+)") 
     const value = re.exec(document.cookie)
-    return value != null ? unescape(value[1]) : null
+    return value != null ? decodeURIComponent(value[1]) : null
 }

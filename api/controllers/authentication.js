@@ -20,6 +20,7 @@ module.exports = function (passport) {
 
         logout (req, res) {
             if (req.user) req.logout()
+            res.clearCookie('user')
             res.enforcer.status(200).send()
         }
     }

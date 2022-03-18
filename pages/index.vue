@@ -1,27 +1,7 @@
 <template>
   <div>
-    <v-btn @click="load()">Load</v-btn>
-
-    <div>
-      <input v-model="text" placeholder="To do item to add">
-    </div>
-
-    <v-btn @click="addItem()">Click Me</v-btn>
-
-    <ul>
-      <li v-for="item in list" :key="item.text">
-        {{item.text}}
-      </li>
-    </ul>
-
-    <h1>Authentication</h1>
-    <v-btn @click="login()">Log In</v-btn>
-    <v-btn @click="logout()">Log Out</v-btn>
-
-    <div v-if="user !== null">
-      Logged in as {{user}}
-    </div>
-
+    <h1>Welcome to the To Do application.</h1>
+    <p>To Do: finish this app</p>
   </div>
 </template>
 

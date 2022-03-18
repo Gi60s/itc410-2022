@@ -17,11 +17,11 @@ const ConnectPgSimple = require('connect-pg-simple')(session)
 
 // set up database connection
 const pool = new Pool({
-  	host: process.env.POSTGRES_HOST,
-  	database: process.env.POSTGRES_DB,
+	host: process.env.POSTGRES_HOST,
+	database: process.env.POSTGRES_DB,
 	user: process.env.POSTGRES_USER,
-  	password: process.env.POSTGRES_PASSWORD,
-  	port: +process.env.POSTGRES_PORT
+	password: process.env.POSTGRES_PASSWORD,
+	port: +process.env.POSTGRES_PORT
 })
 
 // test that we can connect to the database

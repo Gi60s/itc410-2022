@@ -15,6 +15,27 @@ module.exports = function (pool) {
 			}
 		},
 
+		async getAccount (req, res) {
+			const user = req.user
+			res.enforcer.status(200).send({
+				name: user.name,
+				username: user.username
+			})
+		},
+
+		async getAccountByUsername (req, res) {
+			const { username } = req.enforcer.params
+			const account = await accounts.getAccountByUsername(client, username)
+			if (account.account_id !== req.user.id) {
+				res.enforcer.status(403).send()
+			} else {
+				res.enforcer.status(200).send({
+					name: account.name,
+					username: account.username
+				})
+			}
+		},
+
 		async updateAccount (req, res) {
 			const data = req.enforcer.body
 			const { username } = req.enforcer.params

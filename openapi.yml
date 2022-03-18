@@ -5,6 +5,20 @@ info:
 paths:
   /accounts:
     x-controller: accounts
+    get:
+      x-operation: getAccount
+      tags:
+        - Accounts
+      summary: Get account info for logged in user.
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Account'
+        401:
+          description: Not authenticated.
     post:
       x-operation: createAccount
       tags:
@@ -15,20 +29,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              required:
-                - username
-                - name
-                - password
-              properties:
-                username:
-                  type: string
-                name:
-                  type: string
-                password:
-                  type: string
-                  format: password
-                  minLength: 1
+              $ref: '#/components/schemas/Account'
             example:
               username: Bob42
               name: Bob
@@ -44,6 +45,28 @@ paths:
     x-controller: accounts
     parameters:
       - $ref: '#/components/parameters/PathUsername'
+    get:
+      x-operation: getAccountByUsername
+      tags:
+        - Accounts
+      security:
+        - cookieAuth: []
+      summary: Get an account.
+      responses:
+        200:
+          description: Account retrieved.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Account'
+        400:
+          description: Invalid request
+        401:
+          description: Not authenticated.
+        403:
+          description: Access denied.
+        404:
+          description: Not found.
     patch:
       x-operation: updateAccount
       tags:
@@ -334,6 +357,21 @@ components:
       in: cookie
       name: todoSessionId 
   schemas:
+    Account:
+      type: object
+      required:
+        - name
+        - username
+        - password
+      properties:
+        name:
+          type: string
+        username:
+          type: string
+        password:
+          type: string
+          format: password
+          writeOnly: true
     File:
       type: string
       format: binary
